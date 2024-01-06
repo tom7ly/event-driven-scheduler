@@ -11,5 +11,5 @@
     "esModuleInterop": true,
     "moduleResolution": "node"
   },
-  "include": ["./src/**/*.ts", "../scheduler-shared/src/**/*.ts"]
+  "include": ["./src/**/*.ts", "../scheduler-shared/src/**/*.ts", "../scheduler-shared/index.ts"]
 }
