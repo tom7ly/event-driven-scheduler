@@ -1,9 +1,9 @@
 import { rabbitMQService } from "./external-services";
-import { IReminder } from "@scheduler-shared/models/Reminder.models";
-import { EventModel, IEvent } from "@scheduler-shared/models/Event.models";
+import { IReminder } from "scheduler-shared/models/Reminder.models";
+import { EventModel, IEvent } from "scheduler-shared/models/Event.models";
 import { eventsController } from "../controllers/events-controller";
-import { RMQExchange, RMQKeys } from "./RabbitMQ/consts";
-import { IRMQMessage } from "./RabbitMQ/RMQService";
+import { RMQExchange, RMQKeys } from "scheduler-shared/services/RabbitMQ/consts";
+import { IRMQMessage } from "scheduler-shared/services/RabbitMQ/RMQService";
 
 export class EventsService {
     initConsumers = async () => {

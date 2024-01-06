@@ -1,4 +1,4 @@
-import { RMQKeys } from "@scheduler-shared/services/RabbitMQ/consts";
+import { RMQKeys } from "scheduler-shared/services/RabbitMQ/consts";
 import { NextFunction, Request, Response } from "express";
 import { rabbitMQService } from "src/services/external-services";
 

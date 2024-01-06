@@ -1,4 +1,4 @@
-import { RMQKeys } from '@scheduler-shared/services/RabbitMQ/consts';
+import { RMQKeys } from 'scheduler-shared/services/RabbitMQ/consts';
 import { rabbitMQService } from '../../services/external-services';
 import { body, param, validationResult } from 'express-validator';
 

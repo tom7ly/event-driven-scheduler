@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import { APIErr, APIRes, APIResBase, APIStatus, IAPIRes } from '@scheduler-shared/utils/APIutils'
-import { IEvent, validateEvent, EventModel, validatePartialEvent, IBatchData } from '@scheduler-shared/models/Event.models';
+import { APIErr, APIRes, APIResBase, APIStatus, IAPIRes } from 'scheduler-shared/utils/APIutils'
+import { IEvent, validateEvent, EventModel, validatePartialEvent, IBatchData } from 'scheduler-shared/models/Event.models';
 import { rabbitMQService } from '../services/external-services';
 import { IEventsQueryParams, eventUtils } from '../routes/events/events.utils';
-import { RMQExchange, RMQKeys } from '@scheduler-shared/services/RabbitMQ/consts';
+import { RMQExchange, RMQKeys } from 'scheduler-shared/services/RabbitMQ/consts';
 /**
  * [PATH] src/controllers/events-controller.ts
  * This file contains the events controller which handles the business logic for the events API.

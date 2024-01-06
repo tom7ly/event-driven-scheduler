@@ -1,5 +1,5 @@
-import { IRMQMessage, RMQService } from '@scheduler-shared/services/RabbitMQ/RMQService';
-import { RMQueue, RMQExchange } from '@scheduler-shared/services/RabbitMQ/consts'
+import { IRMQMessage, RMQService } from 'scheduler-shared/services/RabbitMQ/RMQService';
+import { RMQueue, RMQExchange } from 'scheduler-shared/services/RabbitMQ/consts'
 const rmqService: RMQService = new RMQService(RMQueue.LOGS, RMQExchange.LOGS);
 
 const logger = async () => {

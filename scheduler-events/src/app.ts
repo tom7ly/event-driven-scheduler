@@ -2,8 +2,8 @@
 import express from 'express';
 import cors from 'cors';
 import { eventsRouter } from './routes/events/events';
-import { PORTS, URIS } from '@scheduler-shared/configs/defaults'
-import { initMongoDB } from '@scheduler-shared/services/MongoDB';
+import { PORTS, URIS } from 'scheduler-shared/configs/defaults'
+import { initMongoDB } from 'scheduler-shared/services/MongoDB';
 import { rabbitMQService, bullQService, restClient } from './services/external-services';
 import { eventsService } from './services/events.service';
 

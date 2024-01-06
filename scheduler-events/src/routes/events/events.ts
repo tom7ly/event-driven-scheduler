@@ -5,8 +5,8 @@ import rateLimit from 'express-rate-limit';
 import { Request, Response } from 'express';
 import { param, } from 'express-validator';
 import { validateBatchOperations, validateGetEventById, validateGetEvents, validateScheduleEvent, validateUpdateEvent } from './events.validator';
-import { APIStatus, IAPIRes } from '@scheduler-shared/utils/APIutils';
-import { IEvent } from '@scheduler-shared/models/Event.models';
+import { APIStatus, IAPIRes } from 'scheduler-shared/utils/APIutils';
+import { IEvent } from 'scheduler-shared/models/Event.models';
 
 /**
  * [PATH] src/routes/events.ts

@@ -1,8 +1,8 @@
 import { bullQService, rabbitMQService, restClient } from '../services/external-services';
 import { Job, JobOptions } from 'bull';
-import { EventModel, IEvent } from 'scheduler-shared/src/models/Event.models'
-import { IReminder, Reminder } from 'scheduler-shared/src/models/Reminder.models';
-import { RMQKeys } from 'scheduler-shared/src/services/RabbitMQ/consts';
+import { EventModel, IEvent } from 'scheduler-shared/models/Event.models'
+import { IReminder, Reminder } from 'scheduler-shared/models/Reminder.models';
+import { RMQKeys } from 'scheduler-shared/services/RabbitMQ/consts';
 
 export const RemindersController = {
     getReminders: async () => {

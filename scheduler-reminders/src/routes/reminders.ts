@@ -1,7 +1,7 @@
 
 import express from 'express';
 import { Request, Response } from 'express';
-import { APIStatus, IAPIRes } from 'scheduler-shared/src/utils/APIutils'
+import { APIStatus, IAPIRes } from 'scheduler-shared/utils/APIutils'
 import { RemindersController } from '../controllers/reminders.controller';
 
 

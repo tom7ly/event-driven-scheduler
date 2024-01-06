@@ -1,4 +1,4 @@
-import { APIErr, APIStatus } from "@scheduler-shared/utils/APIutils";
+import { APIErr, APIStatus } from "scheduler-shared/utils/APIutils";
 
 export interface IEventsQueryParams {
     venue: string;
