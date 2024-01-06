@@ -2,14 +2,14 @@ import {config} from 'dotenv';
 config()
 
 export const PORTS = {
-    CONSUL: Number(process.env.PORTS_CONSUL) || 8500,
-    REDIS: Number(process.env.PORTS_REDIS) || 6379,
-    RABBITMQ: Number(process.env.PORTS_RABBITMQ) || 5672,
-    MONGODB: Number(process.env.PORTS_MONGODB) || 27017,
-    APP: Number(process.env.PORTS_APP) || 8000,
-    EVENTS: Number(process.env.PORTS_EVENTS) || 8001,
-    REMINDERS: Number(process.env.PORTS_REMINDERS) || 8002,
-    LOGS: Number(process.env.PORTS_LOGS) || 8003,
+    CONSUL: Number(process.env.PORT_CONSUL) || 8500,
+    REDIS: Number(process.env.PORT_REDIS) || 6379,
+    RABBITMQ: Number(process.env.PORT_RABBITMQ) || 5672,
+    MONGODB: Number(process.env.PORT_MONGODB) || 27017,
+    APP: Number(process.env.PORT_APP) || 8000,
+    EVENTS: Number(process.env.PORT_EVENTS) || 8001,
+    REMINDERS: Number(process.env.PORT_REMINDERS) || 8002,
+    LOGS: Number(process.env.PORT_LOGS) || 8003,
     JOBS: Number(process.env.PORT_JOBS) || 8004,
 }
 export const HOSTS = {
