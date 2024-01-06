@@ -1,0 +1,85 @@
+version: '3'
+services:
+  api:
+    build: ./scheduler-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./scheduler-api/.env
+    depends_on:
+      - mongodb
+      - rabbitmq
+      - redis
+
+  client:
+    build: ./scheduler-client
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./scheduler-client/.env
+    depends_on:
+      - mongodb
+      - rabbitmq
+      - redis
+  events:
+    build: ./scheduler-events
+    ports:
+      - "8001:8001"
+    env_file:
+      - ./scheduler-events/.env
+    depends_on:
+      - mongodb
+      - rabbitmq
+      - redis
+  logger:
+    build: ./scheduler-logger
+    ports:
+      - "8002:8002"
+    env_file:
+      - ./scheduler-logger/.env
+    depends_on:
+      - mongodb
+      - rabbitmq
+      - redis
+  reminders:
+    build: ./scheduler-reminders
+    ports:
+      - "8003:8003"
+    env_file:
+      - ./scheduler-reminders/.env
+    depends_on:
+      - mongodb
+      - rabbitmq
+      - redis
+
+  shared:
+    build: ./scheduler-shared
+    env_file:
+      - ./scheduler-shared/.env
+    depends_on:
+      - mongodb
+      - rabbitmq
+      - redis
+
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+volumes:
+  mongodb_data:
+  

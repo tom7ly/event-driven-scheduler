@@ -1,12 +1,11 @@
 import { bullQService, rabbitMQService } from "./external-services";
-
 import { Job, JobOptions } from "bull";
-import { IBullQService } from "@scheduler-shared/services/BullQService";
-import { IEvent } from "@scheduler-shared/models/Event.models";
-import { IReminder, Reminder, ReminderJobModel } from "@scheduler-shared/models/Reminder.models";
-import { APIErr } from "@scheduler-shared/utils/APIutils";
-import { RMQKeys, RMQExchange } from "./RabbitMQ/consts";
-import { IRMQMessage } from "./RabbitMQ/RMQService";
+import { IBullQService } from "scheduler-shared/src/services/BullQService";
+import { IEvent } from "scheduler-shared/src/models/Event.models";
+import { IReminder, Reminder, ReminderJobModel } from "scheduler-shared/src/models/Reminder.models";
+import { APIErr } from "scheduler-shared/src/utils/APIutils";
+import { RMQKeys, RMQExchange } from "scheduler-shared/src/services/RabbitMQ/consts";
+import { IRMQMessage } from "scheduler-shared/src/services/RabbitMQ/RMQService";
 
 
 class RemindersService {

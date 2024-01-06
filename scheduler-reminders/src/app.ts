@@ -1,10 +1,13 @@
-import express from 'express'
-import { setupDatabase } from '@scheduler-shared/utils/initiators'
-import { HOSTS, URIS, PORTS } from '@scheduler-shared/configs/defaults'
 import cors from 'cors'
+import express from 'express'
+import { setupDatabase } from 'scheduler-shared/src/utils/initiators'
+import { HOSTS, URIS, PORTS } from 'scheduler-shared/src/configs/defaults'
 import { rabbitMQService } from './services/external-services'
 import { remindersRouter } from './routes/reminders'
 import { remindersService } from './services/reminders.service'
+import {config} from 'dotenv'
+config()
+
 const appService = express()
 
 const setupMiddleware = () => {

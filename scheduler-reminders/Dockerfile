@@ -4,8 +4,6 @@ FROM node:20.6.1
 # Set the working directory in the container to /app
 WORKDIR /app
 
-# Copy scheduler-shared to the root folder
-COPY ../scheduler-shared ../scheduler-shared
 
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
@@ -19,7 +17,7 @@ RUN npm install
 COPY . .
 
 # Expose port 8000 for the application
-EXPOSE 8000
+EXPOSE 8002
 
 # Define the command to run the application
 CMD sh -c 'npm run start > /dev/null & sleep infinity'
