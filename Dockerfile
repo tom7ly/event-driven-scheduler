@@ -5,7 +5,6 @@ FROM node:20.6.1
 WORKDIR /app
 
 # Copy scheduler-shared to the root folder
-COPY ../scheduler-shared ../scheduler-shared
 
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
