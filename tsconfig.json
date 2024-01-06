@@ -3,10 +3,10 @@
     "outDir": "dist",
     "target": "ES2022",
     "module": "ES2022",
-    "rootDir": "src",
+    "rootDir": ".",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "declaration": true
   },
-  "include": ["src/**/*.ts", "index.ts"]
+  "include": ["**/*.ts", "index.ts"]
 }
