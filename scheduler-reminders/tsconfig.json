@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDirs": ["./src", "../scheduler-shared/src"],
+    "baseUrl": ".",
+    "paths": {
+      "@scheduler-shared/*": ["../scheduler-shared/src/*"]
+    },
+    "module": "ES2022",
+    "target": "ES2022",
+    "esModuleInterop": true,
+    "moduleResolution": "node"
+  },
+  "include": ["./src/**/*.ts", "../scheduler-shared/src/**/*.ts"]
+}

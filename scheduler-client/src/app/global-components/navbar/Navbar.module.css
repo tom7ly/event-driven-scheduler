@@ -1,0 +1,11 @@
+.navbar {
+  @apply p-4 bg-gray-200;
+}
+
+.link {
+  @apply text-gray-700 hover:text-gray-500 hover:font-bold transform hover:scale-110 transition-transform  
+}
+
+.selected {
+  @apply text-blue-500 font-bold ease-in-out transition-colors duration-300;
+}
