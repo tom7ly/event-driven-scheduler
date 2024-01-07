@@ -17,7 +17,7 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
-
+  "files": ["dist"],
   "dependencies": {
     "@types/amqplib": "^0.10.4",
     "@types/express": "^4.17.21",

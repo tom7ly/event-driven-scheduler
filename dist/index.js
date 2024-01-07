@@ -1,7 +1,5 @@
-import { config } from 'dotenv';
 import { RMQService } from './services/RabbitMQ/RMQService';
 import { RMQueue, RMQExchange, RMQKeys } from './services/RabbitMQ/consts';
-config();
 // COMPONENTS TESTS
 const rmqSvc = new RMQService(RMQueue.GATEWAY, RMQExchange.LOGS);
 const eventCreatedTarget = {

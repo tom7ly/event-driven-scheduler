@@ -22,7 +22,7 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import Bull, { JobOptions } from "bull";
+import { JobOptions } from "bull";
 import mongoose from "mongoose";
 import { BQType } from "./BullQ.models";
 declare class Reminder implements IReminder {
@@ -37,7 +37,7 @@ declare class Reminder implements IReminder {
     };
     readonly createdAt: Date;
     readonly reminderTime: Date;
-    jobId?: Bull.JobId;
+    jobId?: string;
     readonly type: BQType;
     constructor(title: string, eventSchedule: Date, eventId: string, options?: JobOptions, timeBefore?: {
         hours: number;
@@ -51,7 +51,7 @@ interface IReminder {
     _id?: any;
     title: string;
     eventId: string;
-    jobId?: Bull.JobId;
+    jobId?: string;
     eventSchedule: Date;
     reminderTime: Date;
     createdAt: Date;
