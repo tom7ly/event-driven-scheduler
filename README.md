@@ -11,7 +11,7 @@ Each microservice in this project is containerized using its own Dockerfile. The
 
 These classes are designed as singletons, intended to be instantiated only once per service.
 
-# Event Flow charts
+# Event flow charts
 These graphs present an example of how the architecture works when you create an event. The flow is similiar to when you delete a reminder and so on.
 # <img src="documentation/eds-flowchart-2.png" alt="Dashboard Screenshot" width="70%"/>
 # <img src="documentation/eds-flowchart-1.png" alt="Dashboard Screenshot" width="70%"/>
