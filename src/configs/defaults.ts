@@ -1,5 +1,3 @@
-import {config} from 'dotenv';
-config()
 
 export const PORTS = {
     CONSUL: Number(process.env.PORT_CONSUL) || 8500,

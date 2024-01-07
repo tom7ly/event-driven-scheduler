@@ -1,4 +1,3 @@
-import { config } from 'dotenv';
 import { IEvent } from "./models/Event.models";
 import { RESTClient, RESTProxyClient } from './services/RESTClient';
 import { HOSTS } from './configs/defaults';
@@ -7,7 +6,6 @@ import { BQType, IBQJob } from './models/BullQ.models';
 import { IReminder, Reminder } from './models/Reminder.models';
 import { RMQService, IRMQTarget } from './services/RabbitMQ/RMQService';
 import { RMQueue, RMQExchange, RMQKeys } from './services/RabbitMQ/consts';
-config();
 
 
 // COMPONENTS TESTS
