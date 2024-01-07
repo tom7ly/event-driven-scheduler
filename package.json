@@ -22,7 +22,7 @@
     "typescript": "^5.3.3"
   },
   "files": ["dist/**/*"],
-  "dependencies": {
+  "peerDependencies": {
     "@types/amqplib": "^0.10.4",
     "@types/express": "^4.17.21",
     "amqplib": "^0.10.3",
