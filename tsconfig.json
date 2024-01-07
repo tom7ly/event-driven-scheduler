@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "es2020",
+    "module": "es2020",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "declaration": true,
+    "baseUrl": ".",
+    "paths": {
+      "scheduler-shared/*": ["dist/*"]
+    }
+  },
+  "include": ["**/*.ts", "index.ts"]
+}
