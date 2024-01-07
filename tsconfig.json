@@ -6,7 +6,11 @@
     "rootDir": ".",
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "declaration": true
+    "declaration": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["dist/*"]
+    }
   },
   "include": ["**/*.ts", "index.ts"]
 }
