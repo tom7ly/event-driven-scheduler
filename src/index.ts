@@ -1,11 +1,11 @@
-import { IEvent } from "./src/models/Event.models";
-import { RESTClient, RESTProxyClient } from './src/services/RESTClient';
-import { HOSTS } from './src/configs/defaults';
-import { initBullQService } from './src/services/BullQService';
-import { BQType, IBQJob } from './src/models/BullQ.models';
-import { IReminder, Reminder } from './src/models/Reminder.models';
-import { RMQService, IRMQTarget } from './src/services/RabbitMQ/RMQService';
-import { RMQueue, RMQExchange, RMQKeys } from './src/services/RabbitMQ/consts';
+import { IEvent } from "./models/Event.models";
+import { RESTClient, RESTProxyClient } from './services/RESTClient';
+import { HOSTS } from './configs/defaults';
+import { initBullQService } from './services/BullQService';
+import { BQType, IBQJob } from './models/BullQ.models';
+import { IReminder, Reminder } from './models/Reminder.models';
+import { RMQService, IRMQTarget } from './services/RabbitMQ/RMQService';
+import { RMQueue, RMQExchange, RMQKeys } from './services/RabbitMQ/consts';
 
 
 // COMPONENTS TESTS
