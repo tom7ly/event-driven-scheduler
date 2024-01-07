@@ -1,5 +1,5 @@
-import { RMQService } from './services/RabbitMQ/RMQService';
-import { RMQueue, RMQExchange, RMQKeys } from './services/RabbitMQ/consts';
+import { RMQService } from './src/services/RabbitMQ/RMQService';
+import { RMQueue, RMQExchange, RMQKeys } from './src/services/RabbitMQ/consts';
 // COMPONENTS TESTS
 const rmqSvc = new RMQService(RMQueue.GATEWAY, RMQExchange.LOGS);
 const eventCreatedTarget = {
