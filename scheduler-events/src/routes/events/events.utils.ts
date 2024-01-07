@@ -6,7 +6,6 @@ export interface IEventsQueryParams {
     sortBy: string;
   }
   
-
 export const eventUtils = {
     getEventsQuery({ venue, location, sortBy }: IEventsQueryParams): { query: any, sortOptions: any } {
         const sortOptionsMap = {

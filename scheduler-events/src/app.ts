@@ -15,9 +15,8 @@ const setupMiddleware = () => {
 }
 
 const setupServices = async () => {
-    await rabbitMQService.connect()
-
     await initMongoDB(URIS.MONGODB);
+    await rabbitMQService.connect()
     await eventsService.initConsumers();
 }
 

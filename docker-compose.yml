@@ -1,11 +1,11 @@
 version: '3'
 services:
-  api:
-    build: ./scheduler-api
+  gateway:
+    build: ./scheduler-gateway
     ports:
       - "8000:8000"
     env_file:
-      - ./scheduler-api/.env
+      - ./scheduler-gateway/.env
     depends_on:
       - mongodb
       - rabbitmq
@@ -51,16 +51,6 @@ services:
       - mongodb
       - rabbitmq
       - redis
-
-  shared:
-    build: ./scheduler-shared
-    env_file:
-      - ./scheduler-shared/.env
-    depends_on:
-      - mongodb
-      - rabbitmq
-      - redis
-
 
   mongodb:
     image: mongo:latest

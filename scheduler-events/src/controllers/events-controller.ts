@@ -13,7 +13,7 @@ import { RMQExchange, RMQKeys } from 'scheduler-shared/services/RabbitMQ/consts'
 export class EventsController {
   private handleError(error: Error) {
     console.log(error);
-    // rabbitMQService.publish(RMQKeys.EVENTS.ERROR, "error");
+    rabbitMQService.publish(RMQKeys.EVENTS.ERROR, "error");
     if (error instanceof APIErr) {
       throw error;
     }

@@ -5,8 +5,6 @@ import { HOSTS, URIS, PORTS } from 'scheduler-shared/configs/defaults'
 import { rabbitMQService } from './services/external-services'
 import { remindersRouter } from './routes/reminders'
 import { remindersService } from './services/reminders.service'
-import {config} from 'dotenv'
-config()
 
 const appService = express()
 
@@ -18,12 +16,12 @@ const setupRoutes = () => {
   appService.use('/reminders', remindersRouter)
 }
 const setupServices = async () => {
+  await setupDatabase(URIS.MONGODB);
   await rabbitMQService.connect();
   await remindersService.initConsumers();
 }
 async function startServer() {
   try {
-    await setupDatabase(URIS.MONGODB);
     setupMiddleware();
     setupServices();
     setupRoutes();

@@ -2,7 +2,7 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { Request, Response } from 'express';
-import { APIStatus } from '@scheduler-shared/utils/APIutils';
+import { APIStatus } from 'scheduler-shared/utils/APIutils';
 import { restClient } from '../services/external-services';
 import { publishRequestDetails } from '../utils/middleware';
 /**

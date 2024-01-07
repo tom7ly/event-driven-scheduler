@@ -1,6 +1,6 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { restClient } from "../services/external-services";
-import { IEvent } from '@/models/event';
+import { IEvent } from 'scheduler-shared/models/Event.models'
 
 const eventsService = {
   async getEvent(eventId: string) {

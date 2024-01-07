@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import eventsService from "@/services/eventsService";
-import { IEvent } from "@/models/event";
+import { IEvent } from "scheduler-shared/models/Event.models";
 import Clock from "./components/Clock";
 import WideButton from "../../global-components/buttons/WideButton";
 import AddEventDialog from "./components/AddEventDialog";

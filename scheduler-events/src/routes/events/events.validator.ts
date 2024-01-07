@@ -15,7 +15,6 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 
-// Refactored Validators
 export const validateBatchOperations = [
     isOptionalArray('create'),
     isOptionalArray('update'),

@@ -8,11 +8,11 @@ export const RemindersController = {
     getReminders: async () => {
         try {
             const jobs = await bullQService.getJobs<IReminder>()
-            // rabbitMQService.publish(RMQKeys.REMINDERS.GET, { data: jobs });
             return jobs.map(({ data, id }) => ({ ...data, jobId: id }));
         } catch (error) {
             console.error('Failed to get reminders:', error);
-            throw error;
+            rabbitMQService.publish(RMQKeys.REMINDERS.ERROR, { message: error.message });
+
         }
     },
     getEventReminders: async (eventId: string) => {
@@ -26,11 +26,11 @@ export const RemindersController = {
             const reminders: Job<IReminder>[] = await Promise.all(event.jobs.map(async (job: IReminder) => {
                 return await bullQService.getJob<IReminder>(job.jobId);
             }));
-            // rabbitMQService.publish(RMQKeys.REMINDERS.GET, { data: reminders });
             return reminders;
         } catch (error) {
             console.error('Failed to get reminder:', error);
-            throw error;
+            rabbitMQService.publish(RMQKeys.REMINDERS.ERROR, { message: error.message });
+
         }
     },
     deleteReminder: async (jobId: string) => {
@@ -43,7 +43,7 @@ export const RemindersController = {
             await rabbitMQService.publish(RMQKeys.REMINDERS.DELETED, { data: reminder });
         } catch (error) {
             console.error('Failed to delete reminder:', error);
-            throw error;
+            rabbitMQService.publish(RMQKeys.REMINDERS.ERROR, { message: error.message });
         }
     }
 }

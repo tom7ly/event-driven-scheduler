@@ -14,10 +14,10 @@ class RemindersService {
     private handleError(err: Error) {
         console.error(err);
         rabbitMQService.publish(RMQKeys.REMINDERS.ERROR, { message: err.message });
-        if (err instanceof APIErr) {
-            throw err;
-        }
-        throw new APIErr(500, 'Internal Server Error');
+        // if (err instanceof APIErr) {
+        //     throw err;
+        // }
+        // throw new APIErr(500, 'Internal Server Error');
     }
     async initConsumers() {
         await bullQService.processTask((task) => {
@@ -27,9 +27,7 @@ class RemindersService {
         await rabbitMQService.subscribe({ exchange: RMQExchange.EVENTS, key: RMQKeys.EVENTS.CREATED }, this.onEventCreated.bind(this))
         await rabbitMQService.subscribe({ exchange: RMQExchange.EVENTS, key: RMQKeys.EVENTS.DELETED }, this.onEventDeleted.bind(this))
     }
-    async onEvent(message: IRMQMessage<IEvent>) {
-        message.routingKey === RMQKeys.EVENTS.CREATED ? await this.onEventCreated(message) : await this.onEventDeleted(message);
-    }
+    
     async onEventDeleted(message: IRMQMessage<IEvent>) {
         try {
             const event: IEvent = message.data

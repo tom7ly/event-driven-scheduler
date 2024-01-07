@@ -228,6 +228,10 @@ DELETE /events/{eventId}
 }
 ```
 
+
+
+
+
 # UNIT TESTING
 There are unit tests provided in the `__tests__` folder.
 The tests are for the `events-controller.ts` and specificly for all operations except the batch operations. the batch operations heavily rely on the single operations so there are only unit tests available for the single operations.

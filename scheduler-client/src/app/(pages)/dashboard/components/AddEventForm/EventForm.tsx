@@ -2,7 +2,7 @@ import eventsService from "@/services/eventsService";
 import { useForm } from "react-hook-form";
 import { EventFormInput } from "./components/EventFormInput";
 import { EventFormSelect } from "./components/EventFormSelect";
-import { IEvent } from "@/models/event";
+import { IEvent } from "scheduler-shared/models/Event.models";
 import { cityVenues } from "./consts";
 
 export const EventForm = ({

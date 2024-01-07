@@ -3,7 +3,7 @@ import { EventForm } from "@/app/(pages)/dashboard/components/AddEventForm/Event
 import { CrossSvg } from "../../../global-components/buttons/svgs/SvgIcons";
 import WideButton from "@/app/global-components/buttons/WideButton";
 import { IconButton } from "@/app/global-components/buttons/IconButton";
-import { IEvent } from "@/models/event";
+import { IEvent } from "scheduler-shared/models/Event.models";
 
 interface FormDialogProps {
   isOpen: boolean;

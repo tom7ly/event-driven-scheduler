@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { remindersService } from "@/services/remindersService";
-import { IReminder } from "@/models/reminder";
+import { IReminder } from "scheduler-shared/models/Reminder.models";
 import { IconButton } from "@/app/global-components/buttons/IconButton";
 import { CrossSvg } from "@/app/global-components/buttons/svgs/SvgIcons";
 export default function RemindersPage() {

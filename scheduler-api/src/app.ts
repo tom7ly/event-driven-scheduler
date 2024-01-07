@@ -4,13 +4,11 @@ import cors from 'cors';
 import { eventsRouter } from './routes/events';
 import { remindersRouter } from './routes/reminders';
 import { arena } from './app.config';
-import { APIErr } from 'scheduler-shared/utils/APIutils';
 import { PORTS, URIS, HOSTS } from 'scheduler-shared/configs/defaults'
 import { rabbitMQService } from './services/external-services';
 import { initMongoDB } from 'scheduler-shared/services/MongoDB';
 
 export const app = express();
-
 
 const setupMiddleware = () => {
   app.use(express.json());
