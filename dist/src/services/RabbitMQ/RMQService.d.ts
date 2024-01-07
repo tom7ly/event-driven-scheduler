@@ -27,7 +27,7 @@ export declare class RMQMessage<T = any> implements IRMQMessage<T> {
     constructor(message: IRMQMessage<T>);
     toString(): string;
 }
-export declare type RMQHandler<T = any> = (msg: IRMQMessage<T>) => void;
+export type RMQHandler<T = any> = (msg: IRMQMessage<T>) => void;
 export declare class RMQService {
     name: RMQueue | string;
     exchange: RMQExchange;

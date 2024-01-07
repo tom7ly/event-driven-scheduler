@@ -5,7 +5,9 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist/**/*"},
+    ".": "./dist/index.js",
+    "./*":"./dist/*"
+  },
   "scripts": {
     "build": "tsc",
     "prepare": "tsc",

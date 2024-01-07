@@ -1,7 +1,7 @@
 import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { APIRes } from '../utils/APIutils';
 import { ServiceList } from '../configs/defaults';
-export declare type IRESTClient = {
+export type IRESTClient = {
     [K in ServiceList]: AxiosInstance;
 };
 export declare enum ClientType {
