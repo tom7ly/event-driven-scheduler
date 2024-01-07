@@ -18,11 +18,14 @@ export default function RemindersPage() {
     fetchReminders();
   }, []);
 
-  const cancelReminder = async (jobId: string) => {
-    const response = await remindersService.cancelReminder(jobId);
+  const cancelReminder = async (reminder: IReminder) => {
+    if (!reminder.jobId) return;
+    const response = await remindersService.cancelReminder(reminder.jobId);
     if (response.status === 200) {
       setReminders(
-        reminders.filter((reminder: IReminder) => reminder.jobId !== jobId)
+        reminders.filter(
+          (reminder: IReminder) => reminder.jobId !== reminder.jobId
+        )
       );
     }
   };
@@ -93,7 +96,7 @@ export default function RemindersPage() {
             <IconButton
               SvgIcon={CrossSvg}
               onClickCb={async () => {
-                cancelReminder(reminder.jobId);
+                cancelReminder(reminder);
               }}
             ></IconButton>
           </div>
