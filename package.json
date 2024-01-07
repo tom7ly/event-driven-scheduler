@@ -2,8 +2,6 @@
   "name": "scheduler-shared",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
-  "types": "index.d.ts",
   "scripts": {
     "build": "tsc",
     "prepare": "tsc",
