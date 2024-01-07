@@ -1,3 +1,6 @@
+
+
+
 # Event-Driven Scheduler
 
 This project aims to create a scalable, event-driven architecture for scheduling events in a calendar. The architecture is composed of multiple independent microservices, each capable of functioning autonomously and delivering its specific features.
@@ -8,15 +11,22 @@ Each microservice in this project is containerized using its own Dockerfile. The
 
 These classes are designed as singletons, intended to be instantiated only once per service.
 
+
+
 The technology stack of this project includes noteworthy packages such as:
+
 
 ### Frontend:
 
 - `NextJS` for the React framework
 - `TailwindCSS` for utility-first CSS
+# <img src="documentation/eds-dashboard-ss1.png" alt="Dashboard Screenshot" width="300"/>
+# <img src="documentation/eds-dashboard-ss2.png" alt="Dashboard Screenshot" width="300"/>
+# <img src="documentation/eds-dashboard-ss3.png" alt="Dashboard Screenshot" width="300"/>
+# <img src="documentation/eds-dashboard-ss4.png" alt="Dashboard Screenshot" width="300"/>
+
 
 ### Backend:
-
 - `Node.js` as the runtime environment
 - `TypeScript` for static typing
 - `Express` as the web application framework
@@ -28,7 +38,16 @@ The technology stack of this project includes noteworthy packages such as:
 - `Docker` for containerization
 - `dotenv` for environment variable management
 
+# Event Flow charts
+These graphs present an example of how the architecture works when you create an event. The flow is similiar to when you delete a reminder and so on.
+# <img src="documentation/eds-flowchart-2.png" alt="Dashboard Screenshot" width="70%"/>
+# <img src="documentation/eds-flowchart-1.png" alt="Dashboard Screenshot" width="70%"/>
+
 ### The project is a monorepo while the scheduler-shared is also a subtree
+
+
+
+
 
 # Project Structure
 

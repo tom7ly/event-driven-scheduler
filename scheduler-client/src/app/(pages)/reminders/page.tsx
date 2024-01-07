@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { remindersService } from "@/services/remindersService";
 import { IReminder } from "scheduler-shared/models/Reminder.models";
@@ -46,11 +45,11 @@ export default function RemindersPage() {
   };
   return (
     <div className="">
-      <div className="grid grid-cols-5 pl-4 m-0.5 p-2">
+      <div className="grid grid-cols-8 pl-4 m-0.5 p-2">
         <div className="col-span-2  text-sm">Event ID</div>
-        <div className="col-span-1 text-sm">Event Title</div>
+        <div className="col-span-2 text-sm">Event Title</div>
         <div className="col-span-1 text-sm">Event Due Date</div>
-        <div className="col-span-1 text-sm">Reminder Time</div>
+        <div className="col-span-2 text-sm">Reminder Time</div>
       </div>
       {reminders.map((reminder: IReminder) => {
         const timeRemaining = getTimeRemaining(reminder.eventSchedule);
@@ -59,12 +58,12 @@ export default function RemindersPage() {
         return (
           <div
             key={reminder.jobId}
-            className="grid grid-cols-5  bg-gray-500 w-full rounded-md p-2 pl-4 items-center m-0.5"
+            className="grid grid-cols-8  bg-gray-500 w-full rounded-md p-2 pl-4 items-center m-0.5"
           >
             <div className="col-span-2 text-sm overflow-clip pr-12 overflow-ellipsis  text-white">
               {reminder.eventId}
             </div>
-            <div className="col-span-1 text-sm text-white">
+            <div className="col-span-2 text-sm text-white">
               {reminder.title}
             </div>
             <div className="col-span-1 text-sm text-white">
@@ -82,7 +81,7 @@ export default function RemindersPage() {
                 })}
               </div>
             </div>
-            <div className="col-span-1 text-sm text-white">
+            <div className="col-span-2 text-sm text-white">
               {`${timeRemaining.days}d ${timeRemaining.hours}h ${timeRemaining.minutes}m`}
               <br />
               <div className="pl-5">
