@@ -27,7 +27,7 @@ export interface IEvent {
   jobs: Partial<IReminder>[];
 }
 const joiEventSchema = Joi.object({
-  _id: Joi.object().optional(),
+  _id: Joi.string().optional(),
   __v: Joi.number().optional(),
   title: Joi.string().required(),
   description: Joi.string().required(),
@@ -51,7 +51,7 @@ export function validateEvent(event: IEvent) {
   }
 }
 const joiPartialEventSchema = Joi.object({
-  _id: Joi.object().optional(),
+  _id: Joi.string().optional(),
   __v: Joi.number().optional(),
   title: Joi.string().optional(),
   description: Joi.string().optional(),
