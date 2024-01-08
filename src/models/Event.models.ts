@@ -63,6 +63,7 @@ const joiPartialEventSchema = Joi.object({
   createdAt: Joi.date().iso().optional(),
 });
 const EventSchema: Schema = new Schema({
+  _id: { type: String, default: () => new mongo.ObjectId().toString() },
   title: { type: String, required: true },
   description: { type: String, required: true },
   location: { type: String, required: true },
