@@ -27,7 +27,7 @@ export interface IEvent {
   jobs: Partial<IReminder>[];
 }
 const joiEventSchema = Joi.object({
-  _id: Joi.string().optional(),
+  _id: Joi.object().optional(),
   __v: Joi.number().optional(),
   title: Joi.string().required(),
   description: Joi.string().required(),
@@ -51,7 +51,7 @@ export function validateEvent(event: IEvent) {
   }
 }
 const joiPartialEventSchema = Joi.object({
-  _id: Joi.string().optional(),
+  _id: Joi.object().optional(),
   __v: Joi.number().optional(),
   title: Joi.string().optional(),
   description: Joi.string().optional(),
@@ -63,7 +63,6 @@ const joiPartialEventSchema = Joi.object({
   createdAt: Joi.date().iso().optional(),
 });
 const EventSchema: Schema = new Schema({
-  _id: { type: String, default: () => new mongo.ObjectId().toString() },
   title: { type: String, required: true },
   description: { type: String, required: true },
   location: { type: String, required: true },
