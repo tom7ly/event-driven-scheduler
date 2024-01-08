@@ -18,7 +18,9 @@ class BullQ implements IBullQService {
     constructor(private queueName: BQType = BQType.DEFAULT) {
         this.queue = new Bull(queueName);
     }
-
+    public clearQueue(): Promise<void> {
+        return this.queue.empty();
+    }
     public async addTask<T>(data: T, options: JobOptions={delay:0}): Promise<Job> {
         if (options?.delay < 0 || !options?.delay) {
             throw new APIErr(400, "Invalid delay");
