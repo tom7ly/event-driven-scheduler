@@ -1,7 +1,14 @@
+### `Original Project's Requirements`
+### Create an API that allows users to
+* Schedule a calendar Event
+* Cancel an existing calendar Event
+* Edit and update a calendar Event
+* Simulate a reminder for a calendar invite that is triggered 30 mins prior to the event's scheduled time
+* Potentially add a way for a user to subscribe to an event and see real-time updates (sockets, not yet implemented)
 
 
 
-# Event-Driven Scheduler
+# Solution: `Event Driven Scheduler`
 
 This project aims to create a scalable, event-driven architecture for scheduling events in a calendar. The architecture is composed of multiple independent microservices, each capable of functioning autonomously and delivering its specific features.
 
@@ -43,9 +50,6 @@ The technology stack of this project includes noteworthy packages such as:
 - `BullQueue` for job and message queueing
 - `Docker` for containerization
 - `dotenv` for environment variable management
-
-
-
 
 
 
@@ -193,13 +197,13 @@ or the user.
 
 - `GET /events`: Retrieves all events.
     ```
-    URL: http://localhost:3000/api/events
+    URL: http://localhost:8000/api/events
     Method: GET
     ```
 
 - `POST /events`: Creates a new event.
     ```js
-    URL: http://localhost:3000/api/events
+    URL: http://localhost:8000/api/events
     Method: POST
     Headers: Content-Type: application/json
     Body: 
@@ -212,6 +216,23 @@ or the user.
         "participants": 150,
         "createdAt": "2024-01-07T10:00:00.000Z"
     }
+- `PUT /events/:eventId`: Creates a new event.
+    ```js
+    URL: http://localhost:8000/api/events/:eventId
+    Method: POST
+    Headers: Content-Type: application/json
+    Body: 
+    {
+        "_id": "eventId"
+        "title": "Annual Company Retreat",
+        "description": "A two-day retreat focusing on team building and strategic planning",
+        "location": "Mountainview Resort",
+        "venue": "Grand Hall",
+        "eventSchedule": "2024-06-20T09:00:00.000Z",
+        "participants": 150,
+        "createdAt": "2024-01-07T10:00:00.000Z"
+    }
+
 
 - `GET /events/:eventId`
   ```js

@@ -1,4 +1,4 @@
-import { restClient } from '../services/external-services'
+import { restClient } from './external-services'
 export const remindersService = {
     async getReminders() {
         return await restClient.gw.reminders.get('/');

@@ -1,5 +1,5 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { restClient } from "../services/external-services";
+import { restClient } from "./external-services";
 import { IEvent } from 'scheduler-shared/models/Event.models'
 
 const eventsService = {
@@ -13,8 +13,8 @@ const eventsService = {
   async postEvent(event: IEvent): Promise<IEvent> {
     return (await restClient.gw.events.post('/', event)).data
   },
-  async updateEvent(event: IEvent, eventId: string): Promise<IEvent> {
-    return await restClient.gw.events.put(`/api/events/${eventId}`, event);
+  async updateEvent(event: IEvent): Promise<IEvent> {
+    return (await restClient.gw.events.put(`/${event._id}`, event)).data;
   },
   async deleteEvent(eventId: string): Promise<IEvent> {
     return await restClient.gw.events.delete(`/${eventId}`);

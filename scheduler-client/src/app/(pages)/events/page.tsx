@@ -4,16 +4,21 @@ import eventsService from "@/services/eventsService";
 import { IEvent } from "scheduler-shared/models/Event.models";
 import Clock from "./components/Clock";
 import WideButton from "../../global-components/buttons/WideButton";
-import AddEventDialog from "./components/AddEventDialog";
+import EventDialog from "./components/AddEventDialog";
 import {
   CrossSvg,
   PenSvg,
 } from "@/app/global-components/buttons/svgs/SvgIcons";
 import { IconButton } from "@/app/global-components/buttons/IconButton";
+import { set } from "react-hook-form";
+import { on } from "events";
 
 export default function EventsPage() {
   const [events, setEvents] = useState<IEvent[]>([]);
   const [clockLoaded, setClockLoaded] = useState(false);
+  const [dialogData, setDialogData] = useState<IEvent>();
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const deleteEvent = (id: string) => {
     console.log("deleting event");
     eventsService
@@ -27,6 +32,23 @@ export default function EventsPage() {
       });
   };
 
+  const editEvent = (event: IEvent) => {
+    console.log("editing event");
+    eventsService.updateEvent(event).then((res) => {
+      console.log(res);
+      const updatedEvent = res;
+
+      setEvents(
+        events.map((event) => {
+          if (event._id === res._id) {
+            return updatedEvent;
+          }
+          return event;
+        })
+      );
+    });
+  };
+
   useEffect(() => {
     const fetchEvents = async () => {
       console.log("fetching events");
@@ -35,20 +57,32 @@ export default function EventsPage() {
     };
     fetchEvents();
   }, []);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleOpenDialog = () => {
-    setIsDialogOpen(true);
+  const onOpenEditDialog = (event: IEvent) => {
+    setDialogData(event);
+    setIsEditDialogOpen(true);
+  };
+  const onCloseEditDialog = (data?: IEvent) => {
+    console.log(data);
+    if (data) {
+      editEvent(data);
+    }
+    setIsEditDialogOpen(false);
   };
 
-  const handleCloseDialog = (data?: IEvent) => {
+  const onOpenAddDialog = () => {
+    setDialogData(undefined);
+    setIsAddDialogOpen(true);
+  };
+
+  const onCloseAddDialog = (data?: IEvent) => {
     console.log(data);
     if (data) {
       setEvents([...events, data]);
     }
-    setIsDialogOpen(false);
+    setIsAddDialogOpen(false);
   };
-  const handleClockLoaded = () => {
+  const onCLockLoaded = () => {
     console.log("clock loaded");
     setClockLoaded(true);
   };
@@ -56,13 +90,18 @@ export default function EventsPage() {
   return (
     <div className="bg-white shadow-neutral-700 rounded-sm ">
       <div className="flex items justify-between pb-4">
-        <Clock onLoaded={handleClockLoaded} />
+        <Clock onLoaded={onCLockLoaded} />
         {clockLoaded ? (
-          <WideButton buttonText="Add Event" onClick={handleOpenDialog} />
+          <WideButton buttonText="Add Event" onClick={onOpenAddDialog} />
         ) : (
           ""
         )}
-        <AddEventDialog isOpen={isDialogOpen} onClose={handleCloseDialog} />
+        <EventDialog isOpen={isAddDialogOpen} onClose={onCloseAddDialog} />
+        <EventDialog
+          eventProp={dialogData}
+          isOpen={isEditDialogOpen}
+          onClose={onCloseEditDialog}
+        />
       </div>
       {events?.length > 0 ? (
         <div className="">
@@ -94,12 +133,15 @@ export default function EventsPage() {
               </a>
 
               <p className="text-sm text-white col-span-2">{event.venue}</p>
-              <div className="col-span-1 w-full pr-10 ">
+              <div className="col-span-1 w-full pr-10  ">
+                <IconButton
+                  onClickCb={() => onOpenEditDialog(event)}
+                  SvgIcon={PenSvg}
+                />
                 <IconButton
                   onClickCb={() => deleteEvent(event._id)}
                   SvgIcon={CrossSvg}
                 />
-                {/* <IconButton onClickCb={deleteEvent} SvgIcon={CrossSvg} /> */}
               </div>
             </div>
           ))}

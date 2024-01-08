@@ -4,29 +4,58 @@ import { EventFormInput } from "./components/EventFormInput";
 import { EventFormSelect } from "./components/EventFormSelect";
 import { IEvent } from "scheduler-shared/models/Event.models";
 import { cityVenues } from "./consts";
+import { use, useEffect } from "react";
 
 export const EventForm = ({
-  onEventCreated = (data?: IEvent) => {},
+  onEvent: onEvent = async (data?: IEvent) => {},
+  event,
 }: {
-  onEventCreated?: (data?: IEvent) => void;
+  onEvent?: (data?: IEvent) => void;
+  event?: IEvent;
 }) => {
   const {
     watch,
     register,
     handleSubmit,
+    setValue,
+    trigger,
     formState: { errors, isValid },
   } = useForm({
     mode: "onChange",
   });
-
+  useEffect(() => {
+    console.log(event);
+    if (event) {
+      const {
+        title,
+        description,
+        eventSchedule,
+        location,
+        venue,
+        participants,
+      } = event;
+      setValue("title", title);
+      setValue("description", description);
+      setValue(
+        "eventSchedule",
+        new Date(eventSchedule).toISOString().substring(0, 16)
+      );
+      setValue("location", location);
+      setValue("venue", venue);
+      setValue("participants", participants);
+      setValue("_id", event._id)
+      trigger()
+    }
+  }, [event, setValue]);
   const eventLocation = watch("location");
   const cities: string[] = Object.keys(cityVenues);
   const venues = eventLocation ? cityVenues[eventLocation] : [];
+  if (event && venues.indexOf(event.venue) === -1) {
+    venues.push(event.venue); // Ensure the venue value in the event prop is included in the options
+  }
   const onSubmit = async (data: {}) => {
-    const event = data as IEvent;
-    const response: IEvent = await eventsService.postEvent(event);
-    onEventCreated(response);
-    console.log(response);
+    // const response: IEvent = await eventsService.postEvent(event);
+    await onEvent(data as IEvent);
   };
   return (
     <div className="p-10  w-full">
