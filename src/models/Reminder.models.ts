@@ -6,7 +6,7 @@ import { BQType, IBQJob } from "./BullQ.models";
 class Reminder implements IReminder {
     readonly createdAt: Date;
     readonly reminderTime: Date;
-    jobId?: string;
+    jobId?: number;
     readonly type: BQType = BQType.REMINDERS;
 
 
@@ -47,7 +47,7 @@ interface IReminder {
     _id?: any;
     title: string;
     eventId: string;
-    jobId?: string;
+    jobId?: number;
     eventSchedule: Date;
     reminderTime: Date;
     createdAt: Date;

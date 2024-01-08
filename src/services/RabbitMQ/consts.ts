@@ -22,7 +22,9 @@ export const RMQKeys = {
         ROOT: 'events',
         GET: 'events.get',
         CREATED: 'events.created',
-        UPDATED: 'events.updated',
+        UPDATED: {
+            SCHEDULE: 'events.updated.schedule',
+        },
         DELETED: 'events.deleted',
         BATCH: 'events.batch',
         ERROR: 'events.error'
