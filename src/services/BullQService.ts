@@ -11,6 +11,7 @@ export interface IBullQService {
     processTask(processor: (ITask: any) => any): Promise<void>;
     getJobs<T>(): Promise<Job<T>[]>;
     getJob<T>(jobId: Bull.JobId): Promise<Job<T>>;
+    clearQueue(): Promise<void>;
 }
 
 class BullQ implements IBullQService {
