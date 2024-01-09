@@ -48,14 +48,14 @@ const main = async () => {
     })
     await rmqSvc.publish(eventCreatedTarget.exchange, { data: "asfasf" })
 }
-const restclient = new RESTProxyClient()
-const a = restclient.gw.events.post('/', {
-    title: "asfdasd",
-    description: "fasdfasdf",
-    eventSchedule: "2024-02-08T12:22",
-    location: "Berlin",
-    venue: "Berghain",
-    participants: "12",
-  }).then((res) => { }).catch((err) => { 
-    console.log(err) })
+// const restclient = new RESTProxyClient()
+// const a = restclient.gw.events.post('/', {
+//     title: "asfdasd",
+//     description: "fasdfasdf",
+//     eventSchedule: "2024-02-08T12:22",
+//     location: "Berlin",
+//     venue: "Berghain",
+//     participants: "12",
+//   }).then((res) => { }).catch((err) => { 
+//     console.log(err) })
 main()
