@@ -4,7 +4,7 @@ import Queue, { Job, JobOptions } from 'bull';
 import { IReminder } from '../models/Reminder.models';
 import { BQType, IBQJob } from '../models/BullQ.models';
 import { APIErr } from '../utils/APIutils';
-import { HOSTS, PORTS, URIS } from 'src/configs/defaults';
+import { HOSTS, PORTS, URIS } from '../configs/defaults'
 import Bull from 'bull';
 
 
