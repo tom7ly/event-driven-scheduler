@@ -22,7 +22,7 @@ export const HOSTS = {
     JOBS: process.env.HOST_JOBS || 'localhost',
 }
 export const URIS = {
-    REDIS: HOSTS.REDIS,
+    REDIS: `redis://${HOSTS.REDIS}:${PORTS.REDIS}`,
     RABBITMQ: `amqp://${HOSTS.RABBITMQ}:${PORTS.RABBITMQ}`,
     MONGODB: `mongodb://${HOSTS.MONGODB}:${PORTS.MONGODB}`
 }
