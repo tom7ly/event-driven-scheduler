@@ -17,12 +17,21 @@ export interface IBullQService {
 class BullQ implements IBullQService {
     private queue: Bull.Queue;
     constructor(private queueName: BQType = BQType.DEFAULT) {
-        this.queue = new Bull(queueName);
+        this.queue = new Bull(queueName, {
+            redis: {
+                port: Number(process.env.REDIS_PORT),
+                host: process.env.REDIS_HOST,
+            },
+
+        });
+        this.queue.client.on('connect', () => {
+            console.log('Connected to redis');
+        })
     }
     public clearQueue(): Promise<void> {
         return this.queue.empty();
     }
-    public async addTask<T>(data: T, options: JobOptions={delay:0}): Promise<Job> {
+    public async addTask<T>(data: T, options: JobOptions = { delay: 0 }): Promise<Job> {
         if (options?.delay < 0 || !options?.delay) {
             throw new APIErr(400, "Invalid delay");
         }

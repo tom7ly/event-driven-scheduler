@@ -28,7 +28,7 @@ export abstract class RESTClient {
       throw new APIErr(APIStatus.INTERNAL_SERVER_ERROR, error.message);
     }
   }
-
+  
   protected createAxiosClient(url: string): AxiosInstance {
     const client = axios.create({
       baseURL: url,
