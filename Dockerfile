@@ -18,7 +18,7 @@ RUN npm install
 COPY . .
 
 # Expose port 8000 for the application
-EXPOSE 8000
+EXPOSE 8005
 
 # Define the command to run the application
 CMD sh -c 'npm run start > /dev/null & sleep infinity'

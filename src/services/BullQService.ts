@@ -17,7 +17,7 @@ export interface IBullQService {
 }
 
 class BullQ implements IBullQService {
-    private queue: Bull.Queue;
+    public queue: Bull.Queue;
     constructor(private queueName: BQType = BQType.DEFAULT) {
         this.queue = new Queue(queueName, {
             redis: {
