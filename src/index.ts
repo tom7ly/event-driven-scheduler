@@ -48,7 +48,6 @@ const main = async () => {
     })
     await rmqSvc.publish(eventCreatedTarget.exchange, { data: "asfasf" })
 }
-const a = initBullQService(BQType.DEFAULT);
 
 // const restclient = new RESTProxyClient()
 // const a = restclient.gw.events.post('/', {
