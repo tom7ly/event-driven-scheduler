@@ -4,6 +4,7 @@ import Bull, { Job, JobOptions } from 'bull';
 import { IReminder } from '../models/Reminder.models';
 import { BQType, IBQJob } from '../models/BullQ.models';
 import { APIErr } from '../utils/APIutils';
+import { HOSTS, PORTS } from 'src/configs/defaults';
 
 
 export interface IBullQService {
@@ -19,8 +20,8 @@ class BullQ implements IBullQService {
     constructor(private queueName: BQType = BQType.DEFAULT) {
         this.queue = new Bull(queueName, {
             redis: {
-                port: Number(process.env.REDIS_PORT),
-                host: process.env.REDIS_HOST,
+                port: PORTS.REDIS,
+                host: HOSTS.REDIS
             },
 
         });
