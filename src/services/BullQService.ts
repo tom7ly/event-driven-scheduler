@@ -9,6 +9,7 @@ import Bull from 'bull';
 
 
 export interface IBullQService {
+    queue: Bull.Queue;
     addTask<T>(data: T, options: JobOptions): Promise<Job>;
     processTask(processor: (ITask: any) => any): Promise<void>;
     getJobs<T>(): Promise<Job<T>[]>;
