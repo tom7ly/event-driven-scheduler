@@ -1,10 +1,11 @@
 
 
-import Bull, { Job, JobOptions } from 'bull';
+import Queue, { Job, JobOptions } from 'bull';
 import { IReminder } from '../models/Reminder.models';
 import { BQType, IBQJob } from '../models/BullQ.models';
 import { APIErr } from '../utils/APIutils';
-import { HOSTS, PORTS } from 'src/configs/defaults';
+import { HOSTS, PORTS, URIS } from 'src/configs/defaults';
+import Bull from 'bull';
 
 
 export interface IBullQService {
@@ -18,13 +19,12 @@ export interface IBullQService {
 class BullQ implements IBullQService {
     private queue: Bull.Queue;
     constructor(private queueName: BQType = BQType.DEFAULT) {
-        this.queue = new Bull(queueName, {
+        this.queue = new Queue(queueName, {
             redis: {
                 port: PORTS.REDIS,
-                host: HOSTS.REDIS
-            },
-
-        });
+                host: HOSTS.REDIS,
+            }
+        })
         this.queue.client.on('connect', () => {
             console.log('Connected to redis');
         })

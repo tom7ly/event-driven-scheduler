@@ -1,7 +1,7 @@
 import { IEvent } from "./models/Event.models";
 import { RESTClient, RESTProxyClient } from './services/RESTClient';
 import { HOSTS } from './configs/defaults';
-import { initBullQService } from './services/BullQService';
+import { IBullQService, initBullQService } from './services/BullQService';
 import { BQType, IBQJob } from './models/BullQ.models';
 import { IReminder, Reminder } from './models/Reminder.models';
 import { RMQService, IRMQTarget } from './services/RabbitMQ/RMQService';
@@ -48,6 +48,8 @@ const main = async () => {
     })
     await rmqSvc.publish(eventCreatedTarget.exchange, { data: "asfasf" })
 }
+const a = initBullQService(BQType.DEFAULT);
+
 // const restclient = new RESTProxyClient()
 // const a = restclient.gw.events.post('/', {
 //     title: "asfdasd",
@@ -58,4 +60,4 @@ const main = async () => {
 //     participants: "12",
 //   }).then((res) => { }).catch((err) => { 
 //     console.log(err) })
-main()
+// main()
