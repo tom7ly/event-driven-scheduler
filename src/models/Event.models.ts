@@ -16,7 +16,7 @@ export interface IBatchData {
 
 
 export interface IEvent {
-  _id?: any;
+  _id?: string;
   title: string;
   description: string;
   location: string;
@@ -26,32 +26,68 @@ export interface IEvent {
   createdAt: Date;
   jobs: Partial<IReminder>[];
 }
-const joiEventSchema = Joi.object({
-  _id: Joi.object().optional(),
-  __v: Joi.number().optional(),
+// const joiEventSchema = Joi.object({
+//   _id: Joi.object().optional(),
+//   __v: Joi.number().optional(),
+//   title: Joi.string().required(),
+//   description: Joi.string().required(),
+//   location: Joi.string().required(),
+//   venue: Joi.string().required(),
+//   eventSchedule: Joi.date().iso().required(),
+//   participants: Joi.number().integer().min(0).required(),
+//   jobs: Joi.array().items().empty().optional(),
+//   createdAt: Joi.date().iso().optional(),
+// });
+export const IEventValidator = Joi.object({
+  _id: Joi.any().optional(),
   title: Joi.string().required(),
   description: Joi.string().required(),
   location: Joi.string().required(),
   venue: Joi.string().required(),
-  eventSchedule: Joi.date().iso().required(),
-  participants: Joi.number().integer().min(0).required(),
-  jobs: Joi.array().items().empty().optional(),
-  createdAt: Joi.date().iso().optional(),
+  eventSchedule: Joi.date().greater('now').required(),
+  participants: Joi.number().required(),
+  createdAt: Joi.date().optional(),
+  jobs: Joi.array().items(Joi.any()).optional()
 });
-
-export function validateEvent(event: IEvent) {
-  const { error } = joiEventSchema.validate(event);
+export const IEventValidatorPartial = Joi.object({
+  _id: Joi.any().optional(),
+  title: Joi.string().optional(),
+  description: Joi.string().optional(),
+  location: Joi.string().optional(),
+  venue: Joi.string().optional(),
+  eventSchedule: Joi.date().greater('now').optional(),
+  participants: Joi.number().optional(),
+  createdAt: Joi.date().optional(),
+  jobs: Joi.array().items(Joi.any()).optional()
+});
+/**
+ * @param event - The event object to validate.
+ * @throws {APIErr} If the event object is not valid.
+ */
+export function isEventValid(event: any): void {
+  const { error } = IEventValidator.validate(event);
   if (error) {
     throw new APIErr(APIStatus.BAD_REQUEST, error.message);
   }
+}
 
-  const eventDateTime = new Date(event.eventSchedule)
-  if (eventDateTime < new Date()) {
-    throw new APIErr(APIStatus.BAD_REQUEST, '"eventSchedule.date" and "eventSchedule.time" must be either the current date/time or later');
+/**
+ * Validates an event object using the IEventValidatorPartial schema.
+ * @param event - The event object to validate.
+ * @throws {APIErr} If the event object is not valid.
+ */
+export function isPartialEventValid(event: any): void {
+  const { error } = IEventValidatorPartial.validate(event);
+  if (error) {
+    throw new APIErr(APIStatus.BAD_REQUEST, error.message);
   }
 }
+
+
+export default IEventValidator;
+
 const joiPartialEventSchema = Joi.object({
-  _id: Joi.object().optional(),
+  _id: Joi.any().optional(),
   __v: Joi.number().optional(),
   title: Joi.string().optional(),
   description: Joi.string().optional(),
