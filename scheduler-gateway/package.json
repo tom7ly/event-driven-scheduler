@@ -30,7 +30,6 @@
     "uuid": "^9.0.1",
     "ws": "^8.14.2",
     "scheduler-shared": "git+https://github.com/tom7ly/scheduler-shared"
-
   },
   "devDependencies": {
     "@babel/core": "^7.23.5",

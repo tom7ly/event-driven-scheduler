@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import eventsService from "@/services/eventsService";
-import { IEvent } from "scheduler-shared/models/Event.models";
+import { IEvent } from "scheduler-shared/dist/models/Event.models";
 import Clock from "./components/Clock";
 import WideButton from "../../global-components/buttons/WideButton";
 import EventDialog from "./components/AddEventDialog";
@@ -12,6 +12,10 @@ import {
 import { IconButton } from "@/app/global-components/buttons/IconButton";
 import { set } from "react-hook-form";
 import { on } from "events";
+import {
+  Snackbar,
+  SnackbarState,
+} from "@/app/global-components/snackbars/snackbars";
 
 export default function EventsPage() {
   const [events, setEvents] = useState<IEvent[]>([]);
@@ -19,6 +23,11 @@ export default function EventsPage() {
   const [dialogData, setDialogData] = useState<IEvent>();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState<SnackbarState>({
+    isVisible: false,
+    message: "",
+    err: false,
+  });
   const deleteEvent = (id: string) => {
     console.log("deleting event");
     eventsService
@@ -26,27 +35,54 @@ export default function EventsPage() {
       .then((res) => {
         console.log(res);
         setEvents(events.filter((event) => event._id !== id));
+        setSnackbar({
+          isVisible: true,
+          message: "Event deleted successfully",
+          err: false,
+        });
       })
       .catch((err) => {
         console.log(err);
+        const msg = err.data ? err.data : err.message;
+        setSnackbar({
+          isVisible: true,
+          message: `Error deleting event: ${msg}}`,
+          err: true,
+        });
       });
   };
 
   const editEvent = (event: IEvent) => {
     console.log("editing event");
-    eventsService.updateEvent(event).then((res) => {
-      console.log(res);
-      const updatedEvent = res;
+    eventsService
+      .updateEvent(event)
+      .then((res) => {
+        console.log(res);
+        const updatedEvent = res;
 
-      setEvents(
-        events.map((event) => {
-          if (event._id === res._id) {
-            return updatedEvent;
-          }
-          return event;
-        })
-      );
-    });
+        setEvents(
+          events.map((event) => {
+            if (event._id === res._id) {
+              return updatedEvent;
+            }
+            return event;
+          })
+        );
+        setSnackbar({
+          isVisible: true,
+          message: "Event updated successfully",
+          err: false,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        const msg = err.data ? err.data : err.message;
+        setSnackbar({
+          isVisible: true,
+          message: `Error updating event: ${msg}`,
+          err: true,
+        });
+      });
   };
 
   useEffect(() => {
@@ -64,9 +100,7 @@ export default function EventsPage() {
   };
   const onCloseEditDialog = (data?: IEvent) => {
     console.log(data);
-    if (data) {
-      editEvent(data);
-    }
+    data ? editEvent(data) : "";
     setIsEditDialogOpen(false);
   };
 
@@ -74,12 +108,32 @@ export default function EventsPage() {
     setDialogData(undefined);
     setIsAddDialogOpen(true);
   };
-
-  const onCloseAddDialog = (data?: IEvent) => {
+  const addEvent = async (event: IEvent) => {
+    console.log("adding event");
+    eventsService
+      .postEvent(event)
+      .then((res) => {
+        console.log(res);
+        setEvents([...events, res]);
+        setSnackbar({
+          isVisible: true,
+          message: "Event created successfully",
+          err: false,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        const msg = err.data ? err.data : err.message;
+        setSnackbar({
+          isVisible: true,
+          message: `Error creating event: ${msg}`,
+          err: true,
+        });
+      });
+  };
+  const onCloseAddDialog = async (data?: IEvent) => {
     console.log(data);
-    if (data) {
-      setEvents([...events, data]);
-    }
+    data ? await addEvent(data) : "";
     setIsAddDialogOpen(false);
   };
   const onCLockLoaded = () => {
@@ -103,6 +157,7 @@ export default function EventsPage() {
           onClose={onCloseEditDialog}
         />
       </div>
+      <Snackbar snackbar={snackbar} setSnackbar={setSnackbar} />
       {events?.length > 0 ? (
         <div className="">
           <div className="grid grid-cols-12 p-2 pl-6">
@@ -139,7 +194,7 @@ export default function EventsPage() {
                   SvgIcon={PenSvg}
                 />
                 <IconButton
-                  onClickCb={() => deleteEvent(event._id)}
+                  onClickCb={() => deleteEvent(event._id!)}
                   SvgIcon={CrossSvg}
                 />
               </div>

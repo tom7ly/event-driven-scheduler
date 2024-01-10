@@ -2,8 +2,8 @@
 import express from 'express';
 import cors from 'cors';
 import { eventsRouter } from './routes/events/events';
-import { PORTS, URIS } from 'scheduler-shared/configs/defaults'
-import { initMongoDB } from 'scheduler-shared/services/MongoDB';
+import { PORTS, URIS } from 'scheduler-shared/dist/configs/defaults'
+import { initMongoDB } from 'scheduler-shared/dist/services/MongoDB';
 import { rabbitMQService, bullQService, restClient } from './services/external-services';
 import { eventsService } from './services/events.service';
 
@@ -27,8 +27,8 @@ const setupRoutes = () => {
 async function startServer() {
     try {
         setupMiddleware();
-        setupRoutes();
         await setupServices();
+        setupRoutes();
         app.listen(PORTS.EVENTS, () => { console.log(`Server is running on port ${PORTS.EVENTS}`); });
     }
     catch (err) {

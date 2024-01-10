@@ -1,11 +1,11 @@
 import { bullQService, rabbitMQService } from "./external-services";
 import { Job, JobOptions } from "bull";
-import { IBullQService } from "scheduler-shared/services/BullQService";
-import { IEvent } from "scheduler-shared/models/Event.models";
-import { IReminder, Reminder, ReminderJobModel } from "scheduler-shared/models/Reminder.models";
-import { APIErr } from "scheduler-shared/utils/APIutils";
-import { RMQKeys, RMQExchange } from "scheduler-shared/services/RabbitMQ/consts";
-import { IRMQMessage } from "scheduler-shared/services/RabbitMQ/RMQService";
+import { IBullQService } from "scheduler-shared/dist/services/BullQService";
+import { IEvent } from "scheduler-shared/dist/models/Event.models";
+import { IReminder, Reminder, ReminderJobModel } from "scheduler-shared/dist/models/Reminder.models";
+import { APIErr } from "scheduler-shared/dist/utils/APIutils";
+import { RMQKeys, RMQExchange } from "scheduler-shared/dist/services/RabbitMQ/consts";
+import { IRMQMessage } from "scheduler-shared/dist/services/RabbitMQ/RMQService";
 
 
 class RemindersService {
@@ -26,15 +26,36 @@ class RemindersService {
         });
         await rabbitMQService.subscribe({ exchange: RMQExchange.EVENTS, key: RMQKeys.EVENTS.CREATED }, this.onEventCreated.bind(this))
         await rabbitMQService.subscribe({ exchange: RMQExchange.EVENTS, key: RMQKeys.EVENTS.DELETED }, this.onEventDeleted.bind(this))
+        await rabbitMQService.subscribe({ exchange: RMQExchange.EVENTS, key: RMQKeys.EVENTS.UPDATED.SCHEDULE }, this.onEventUpdated.bind(this))
     }
-    
+    async onEventUpdated(message: IRMQMessage<IEvent>) {
+        try {
+            const event: IEvent = message.data
+            await Promise.all(event.jobs.map(async (reminder: IReminder) => {
+                await bullQService.getJob<IReminder>(reminder.jobId).then(async (job: Job<IReminder>) => {
+                    if (job) {
+                        rabbitMQService.publish(RMQKeys.REMINDERS.DELETED, { data: job.data, message: "Reminder deleted" });
+                        await job.remove();
+                    }
+                })
+            }))
+            return await this.createReminderFromEvent(event).then(async (reminder: IReminder) => {
+                await rabbitMQService.publish(RMQKeys.REMINDERS.CREATED, { data: reminder, message: "Reminder created" });
+            })
+
+        } catch (error) {
+            this.handleError(error);
+        }
+    }
+
     async onEventDeleted(message: IRMQMessage<IEvent>) {
         try {
             const event: IEvent = message.data
             await Promise.all(event.jobs.map(async (reminder: IReminder) => {
                 await bullQService.getJob<IReminder>(reminder.jobId).then(async (job: Job<IReminder>) => {
-                    await job.remove();
-                    await ReminderJobModel.findByIdAndDelete(reminder._id);
+                    if (job) {
+                        await job.remove();
+                    }
                 })
             }))
         } catch (error) {
@@ -53,8 +74,9 @@ class RemindersService {
     async createReminderFromEvent(event: IEvent): Promise<IReminder> {
         try {
             const reminder: Reminder = new Reminder(event.title, event.eventSchedule, event._id);
-            const job: Job<IReminder> = await bullQService.addTask<IReminder>(reminder, { delay: reminder.calculateDelay() });
-            reminder.jobId = job.id;
+            const delay = reminder.calculateDelay();
+            const job: Job<IReminder> = await bullQService.addTask<IReminder>(reminder, { delay: delay });
+            reminder.jobId = Number(job.id);
             return reminder;
         } catch (error) {
             this.handleError(error);

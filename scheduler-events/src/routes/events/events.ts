@@ -4,9 +4,11 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { Request, Response } from 'express';
 import { param, } from 'express-validator';
-import { validateBatchOperations, validateGetEventById, validateGetEvents, validateScheduleEvent, validateUpdateEvent } from './events.validator';
-import { APIStatus, IAPIRes } from 'scheduler-shared/utils/APIutils';
-import { IEvent } from 'scheduler-shared/models/Event.models';
+import { validateBatchOperations, validateGetEventById, validateGetEvents, validateScheduleEvent, validateUpdateEvent } from '../../utils/events.validator';
+import { APIStatus, IAPIRes } from 'scheduler-shared/dist/utils/APIutils';
+import { IEvent } from 'scheduler-shared/dist/models/Event.models';
+import { rabbitMQService } from 'src/services/external-services';
+import { RMQExchange, RMQKeys } from 'scheduler-shared/dist/services/RabbitMQ/consts';
 
 /**
  * [PATH] src/routes/events.ts
@@ -22,11 +24,12 @@ router.use(
 );
 router.post('/', validateScheduleEvent, async (req, res: Response) => {
   try {
-    const eventData: IEvent = req.validatedData;
-    const result:IEvent = await eventsController.scheduleEvent(eventData);
+    const eventData: IEvent = req.body;
+    const result: IEvent = await eventsController.scheduleEvent(eventData);
+    await rabbitMQService.publish(RMQKeys.EVENTS.CREATED, { data: result })
     res.status(APIStatus.OK).json(result);
   } catch (error) {
-    res.status(error.status).json({ message: error.message });
+    res.status(error.status).send(error.message);
   }
 
 })
@@ -60,6 +63,7 @@ router.get('/:eventId', validateGetEventById, async (req, res) => {
 router.put('/:eventId', validateUpdateEvent, async (req, res) => {
   try {
     const result = await eventsController.updateEvent(req.validatedData.eventId, req.validatedData.data);
+    rabbitMQService.publish(RMQKeys.EVENTS.UPDATED.SCHEDULE, { data: result });
     res.status(APIStatus.OK).json(result);
   } catch (error) {
     res.status(error.status).json({ message: error.message });
@@ -70,6 +74,7 @@ router.delete('/:eventId', param('eventId').isMongoId(), async (req, res) => {
   try {
     const eventId = req.params.eventId;
     const result = await eventsController.deleteEvent(eventId);
+    rabbitMQService.publish(RMQKeys.EVENTS.DELETED, { data: result })
     res.status(APIStatus.OK).json(result);
   } catch (error) {
     res.status(error.status).json({ message: error.message });

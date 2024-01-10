@@ -1,23 +1,18 @@
-# Use an official Node.js runtime as the base image
 FROM node:20.6.1
 
-# Set the working directory in the container to /app
 WORKDIR /app
 
-
-# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
-
-# Install the application dependencies
-RUN npm install
-
-# If you are building your code for production, run `npm ci --only=production`
-
-# Copy the rest of the application code to the working directory
 COPY . .
 
-# Expose port 8000 for the application
-EXPOSE 8000
+RUN npm cache clean --force
+RUN npm install
+RUN npm update scheduler-shared --force
 
-# Define the command to run the application
-CMD sh -c 'npm run start > /dev/null & sleep infinity'
+
+
+EXPOSE 8001
+
+# CMD sh -c 'npm run start > /dev/null & sleep infinity'
+RUN npm run build
+CMD ["npm", "run", "start"]

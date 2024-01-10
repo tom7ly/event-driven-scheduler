@@ -6,7 +6,7 @@ export const remindersService = {
     async createReminder(reminder: any) {
         return await restClient.gw.reminders.post('/', reminder);
     },
-    async cancelReminder(jobId: string) {
+    async cancelReminder(jobId: number) {
         return await restClient.gw.reminders.delete(`/${jobId}`);
     }
 }

@@ -2,13 +2,17 @@ FROM node:20.6.1
 
 WORKDIR /app
 
-
 COPY package*.json ./
-
-RUN npm install
-
 COPY . .
 
-EXPOSE 8002
+RUN npm cache clean --force
+RUN npm install
+RUN npm update scheduler-shared --force
 
-CMD sh -c 'npm run start > /dev/null & sleep infinity'
+
+
+EXPOSE 8001
+
+# CMD sh -c 'npm run start > /dev/null & sleep infinity'
+RUN npm run build
+CMD ["npm", "run", "start"]

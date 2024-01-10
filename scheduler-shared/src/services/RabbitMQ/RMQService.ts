@@ -67,7 +67,6 @@ export class RMQService {
     private channel: Channel | null = null;
     private handlers: Map<string, RMQHandler> = new Map();
     constructor(public name: RMQueue | string, public exchange: RMQExchange) {
-        this.name = name + generateUID();
     }
     async connect(url: string = URIS.RABBITMQ): Promise<void> {
         this.connection = await connect(url);
@@ -83,7 +82,7 @@ export class RMQService {
     }
 
     async publish<T>(routingKey: string, data: any): Promise<void> {
-        const message = new RMQMessage<T>({...data,routingKey: routingKey})
+        const message = new RMQMessage<T>({ ...data, routingKey: routingKey })
         const payload = JSON.stringify(message);
         if (!this.channel) {
             throw new Error('Cannot publish message, channel is not initialized');
@@ -97,7 +96,7 @@ export class RMQService {
             throw new Error('Cannot subscribe, channel is not initialized');
         }
         await this.channel.assertExchange(target.exchange, "topic", { durable: false });
-        const assertQueue = await this.channel.assertQueue(this.name, { exclusive: true });
+        const assertQueue = await this.channel.assertQueue(this.name + generateUID(), { exclusive: true });
         await this.channel.bindQueue(assertQueue.queue, target.exchange, target.key);
         this.channel.consume(assertQueue.queue, (msg) => {
             const data = JSON.parse(msg.content.toString());

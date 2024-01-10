@@ -20,4 +20,4 @@ COPY . .
 EXPOSE 3000
 
 # Define the command to run the application
-CMD sh -c 'npm run start > /dev/null & sleep infinity'
+CMD ["npm","run", "start:prod"]

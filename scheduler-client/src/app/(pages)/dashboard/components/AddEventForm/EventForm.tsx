@@ -2,15 +2,15 @@ import eventsService from "@/services/eventsService";
 import { useForm } from "react-hook-form";
 import { EventFormInput } from "./components/EventFormInput";
 import { EventFormSelect } from "./components/EventFormSelect";
-import { IEvent } from "scheduler-shared/models/Event.models";
+import { IEvent } from "scheduler-shared/dist/models/Event.models";
 import { cityVenues } from "./consts";
 import { use, useEffect } from "react";
 
 export const EventForm = ({
-  onEvent: onEvent = async (data?: IEvent) => {},
+  onSubmitCB: onSubmitCB = async (data?: IEvent) => {},
   event,
 }: {
-  onEvent?: (data?: IEvent) => void;
+  onSubmitCB?: (data?: IEvent) => void;
   event?: IEvent;
 }) => {
   const {
@@ -54,8 +54,7 @@ export const EventForm = ({
     venues.push(event.venue); // Ensure the venue value in the event prop is included in the options
   }
   const onSubmit = async (data: {}) => {
-    // const response: IEvent = await eventsService.postEvent(event);
-    await onEvent(data as IEvent);
+    onSubmitCB(data as IEvent);
   };
   return (
     <div className="p-10  w-full">

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "start": "npx tsx src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -27,3 +28,4 @@
     "scheduler-shared": "git+https://github.com/tom7ly/scheduler-shared"
   }
 }
+   

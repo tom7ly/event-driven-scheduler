@@ -1,9 +1,9 @@
 import { rabbitMQService } from "./external-services";
-import { IReminder } from "scheduler-shared/models/Reminder.models";
-import { EventModel, IEvent } from "scheduler-shared/models/Event.models";
+import { IReminder } from "scheduler-shared/dist/models/Reminder.models";
+import { EventModel, IEvent } from "scheduler-shared/dist/models/Event.models";
 import { eventsController } from "../controllers/events-controller";
-import { RMQExchange, RMQKeys } from "scheduler-shared/services/RabbitMQ/consts";
-import { IRMQMessage } from "scheduler-shared/services/RabbitMQ/RMQService";
+import { RMQExchange, RMQKeys } from "scheduler-shared/dist/services/RabbitMQ/consts";
+import { IRMQMessage } from "scheduler-shared/dist/services/RabbitMQ/RMQService";
 
 export class EventsService {
     initConsumers = async () => {
@@ -18,7 +18,7 @@ export class EventsService {
             const reminder = message.data;
             const updatedEvent: IEvent = await this.removeReminderFromEvent(reminder.eventId, reminder);
             rabbitMQService.publish(
-                RMQKeys.EVENTS.UPDATED, { data: updatedEvent, message: `updated event ${updatedEvent} with reminder ${reminder._id}` });
+                RMQKeys.EVENTS.ROOT, { data: updatedEvent, message: `Deleted reminder from event ${updatedEvent}` });
         } catch (error) {
             rabbitMQService.publish(RMQKeys.EVENTS.ERROR, error);
             console.error('Failed to update event:', error);
@@ -29,7 +29,7 @@ export class EventsService {
         try {
             const reminder = message.data;
             const updatedEvent: IEvent = await this.addReminderToEvent(reminder.eventId, reminder);
-            rabbitMQService.publish<IEvent>(RMQKeys.EVENTS.UPDATED, {
+            rabbitMQService.publish<IEvent>(RMQKeys.EVENTS.ROOT, {
                 data: updatedEvent, message: `updated event ${updatedEvent} with reminder ${reminder._id}`
             });
         } catch (error) {
@@ -53,7 +53,10 @@ export class EventsService {
         try {
             const event: IEvent = await eventsController.getEventById(eventId);
             event.jobs.push({ jobId: reminder.jobId, reminderTime: reminder.reminderTime });
-            return await eventsController.updateEvent(eventId, event);
+            return await eventsController.updateEvent(eventId, event).then(event => {
+                rabbitMQService.publish(RMQKeys.EVENTS.ROOT, { data: event, message: `updated event ${event} with reminder ${reminder._id}` });
+                return event;
+            })
         } catch (error) {
             rabbitMQService.publish(RMQKeys.EVENTS.ERROR, error);
             console.error('Failed to update event:', error);

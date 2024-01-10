@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
-import { APIErr, APIRes, APIResBase, APIStatus, IAPIRes } from 'scheduler-shared/utils/APIutils'
-import { IEvent, validateEvent, EventModel, validatePartialEvent, IBatchData } from 'scheduler-shared/models/Event.models';
+import { APIErr, APIRes, APIResBase, APIStatus, IAPIRes } from 'scheduler-shared/dist/utils/APIutils'
+import { IEvent, EventModel, validatePartialEvent, IBatchData, isEventValid } from 'scheduler-shared/dist/models/Event.models';
 import { rabbitMQService } from '../services/external-services';
-import { IEventsQueryParams, eventUtils } from '../routes/events/events.utils';
-import { RMQExchange, RMQKeys } from 'scheduler-shared/services/RabbitMQ/consts';
+import { IEventsQueryParams, eventUtils } from '../utils/events.utils';
+import { RMQExchange, RMQKeys } from 'scheduler-shared/dist/services/RabbitMQ/consts';
+import { isMongoId } from 'scheduler-shared/dist/utils/helpers'
 /**
  * [PATH] src/controllers/events-controller.ts
  * This file contains the events controller which handles the business logic for the events API.
@@ -42,7 +43,7 @@ export class EventsController {
   }
 
 
-
+  7
   async getEventById(eventId: string): Promise<IEvent> {
     try {
       if (!eventId) {
@@ -60,14 +61,12 @@ export class EventsController {
 
   async scheduleEvent(event: IEvent): Promise<IEvent> {
     try {
-      validateEvent(event);
+      isEventValid(event)
       const existingEvent = await this.getEventByData(event);
       if (existingEvent) {
         throw new APIErr(APIStatus.BAD_REQUEST, 'Another event already scheduled in the same location and venue at the same time');
       }
-      const newEvent: IEvent = (await EventModel.create(event)).toObject()
-      await rabbitMQService.publish(RMQKeys.EVENTS.CREATED, { data: newEvent, message: "ASIJFOASIFJAOISJFOAISFJOAISFJIOASJF" })
-      return newEvent;
+      return (await EventModel.create(event)).toObject();
     } catch (error) {
       this.handleError(error);
     }
@@ -85,7 +84,7 @@ export class EventsController {
       if (!updatedEvent) {
         throw new APIErr(APIStatus.NOT_FOUND, 'Event not found');
       }
-      return updatedEvent.toObject();
+      return updatedEvent
     } catch (error) {
       this.handleError(error);
     }
@@ -93,7 +92,9 @@ export class EventsController {
 
   async deleteEvent(eventId: string): Promise<IEvent> {
     try {
-
+      if (!eventId) {
+        throw new APIErr(APIStatus.BAD_REQUEST, "Event ID is required");
+      }
       const event = await EventModel.findById(eventId);
       if (!event) {
         throw new APIErr(APIStatus.NOT_FOUND, 'Event not found');
@@ -103,7 +104,6 @@ export class EventsController {
       if (!deletedEvent) {
         throw new APIErr(APIStatus.NOT_FOUND, 'Event not found');
       }
-      rabbitMQService.publish(RMQKeys.EVENTS.DELETED, { data: deletedEvent, message: RMQKeys.EVENTS.DELETED })
       return deletedEvent;
     } catch (error) {
       this.handleError(error);
@@ -210,3 +210,4 @@ export class EventsController {
   }
 }
 export const eventsController = new EventsController();
+

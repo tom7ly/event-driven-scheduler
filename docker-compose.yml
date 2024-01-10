@@ -1,57 +1,11 @@
 version: '3'
 services:
-  gateway:
-    build: ./scheduler-gateway
-    ports:
-      - "8000:8000"
-    env_file:
-      - ./scheduler-gateway/.env
-    depends_on:
-      - mongodb
-      - rabbitmq
-      - redis
 
-  client:
-    build: ./scheduler-client
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
     ports:
-      - "3000:3000"
-    env_file:
-      - ./scheduler-client/.env
-    depends_on:
-      - mongodb
-      - rabbitmq
-      - redis
-  events:
-    build: ./scheduler-events
-    ports:
-      - "8001:8001"
-    env_file:
-      - ./scheduler-events/.env
-    depends_on:
-      - mongodb
-      - rabbitmq
-      - redis
-  logger:
-    build: ./scheduler-logger
-    ports:
-      - "8002:8002"
-    env_file:
-      - ./scheduler-logger/.env
-    depends_on:
-      - mongodb
-      - rabbitmq
-      - redis
-  reminders:
-    build: ./scheduler-reminders
-    ports:
-      - "8003:8003"
-    env_file:
-      - ./scheduler-reminders/.env
-    depends_on:
-      - mongodb
-      - rabbitmq
-      - redis
-
+     - "5672:5672"
+     - "15672:15672"
   mongodb:
     image: mongo:latest
     ports:
@@ -59,16 +13,78 @@ services:
     volumes:
       - mongodb_data:/data/db
 
-  rabbitmq:
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-
   redis:
     image: redis:latest
     ports:
       - "6379:6379"
+
+  wait-for-rabbitmq:
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - rabbitmq
+    command: rabbitmq:5672
+  gateway:
+    build: 
+      context: ./scheduler-gateway
+      args:
+        NO_CACHE: 1
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+      - rabbitmq
+      - redis
+
+  client:
+    build: 
+      context: ./scheduler-client
+      args:
+        NO_CACHE: 1
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - events
+      - gateway
+      - reminders
+      - mongodb
+      - rabbitmq
+      - redis
+  events:
+    build:
+      context: ./scheduler-events
+      args:
+        NO_CACHE: 1
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+      - rabbitmq
+      - redis
+  reminders:
+    build:
+      context: ./scheduler-reminders
+      args:
+        NO_CACHE: 1
+    ports:
+      - "8002:8002"
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+      - rabbitmq
+      - redis
+
+
+
+  
+
+
 
 volumes:
   mongodb_data:

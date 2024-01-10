@@ -21,4 +21,5 @@ COPY . .
 EXPOSE 8000
 
 # Define the command to run the application
+RUN npm build
 CMD sh -c 'npm run start > /dev/null & sleep infinity'

@@ -2,7 +2,7 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { Request, Response } from 'express';
-import { APIStatus } from 'scheduler-shared/utils/APIutils';
+import { APIStatus } from 'scheduler-shared/dist/utils/APIutils';
 import { restClient } from '../services/external-services';
 import { publishRequestDetails } from '../utils/middleware';
 /**
@@ -18,12 +18,12 @@ router.use(
   })
 );
 
-router.post('/events',publishRequestDetails, async (req: Request, res: Response) => {
+router.post('/events', publishRequestDetails, async (req: Request, res: Response) => {
   try {
     const result = await restClient.services.events.post('/', req.body);
     return res.status(APIStatus.OK).json(result.data);
   } catch (error) {
-    res.status(error.status).json({ message: error.message });
+    res.status(error.status).json( error.data );
   }
 })
 
@@ -32,7 +32,7 @@ router.get('/events', publishRequestDetails, async (req, res) => {
     const result = await restClient.services.events.get('/', req.query);
     res.status(APIStatus.OK).json(result.data);
   } catch (error) {
-    res.status(error.status).json({ message: error.message });
+    res.status(error.status).json(error.data);
   }
 });
 
@@ -41,34 +41,34 @@ router.post('/events/batch', async (req: Request, res: Response) => {
     const result = await restClient.services.events.post('/batch', req.body);
     res.status(APIStatus.OK).json(result.data);
   } catch (error) {
-    res.status(error.status).json({ message: error.message });
+    res.status(error.status).json(error.data);
   }
 });
 
-router.get('/events/:eventId',publishRequestDetails, async (req: Request, res: Response) => {
+router.get('/events/:eventId', publishRequestDetails, async (req: Request, res: Response) => {
   try {
     const result = await restClient.services.events.get(`/${req.params.eventId}`);
     res.status(APIStatus.OK).json(result.data);
   } catch (error) {
-    res.status(error.status).json({ message: error.message });
+    res.status(error.status).json(error.data);
   }
 });
 
-router.put('/events/:eventId',publishRequestDetails, async (req: Request, res: Response) => {
+router.put('/events/:eventId', publishRequestDetails, async (req: Request, res: Response) => {
   try {
     const result = await restClient.services.events.put(`/${req.params.eventId}`, req.body);
     res.status(APIStatus.OK).json(result.data);
   } catch (error) {
-    res.status(error.status).json({ message: error.message });
+    res.status(error.status).json(error.data);
   }
 });
 
-router.delete('/events/:eventId',publishRequestDetails, async (req: Request, res: Response) => {
+router.delete('/events/:eventId', publishRequestDetails, async (req: Request, res: Response) => {
   try {
     const result = await restClient.services.events.delete(`/${req.params.eventId}`);
     res.status(APIStatus.OK).json(result.data);
   } catch (error) {
-    res.status(error.status).json({ message: error.message });
+    res.status(error.status).json(error.data);
   }
 });
 

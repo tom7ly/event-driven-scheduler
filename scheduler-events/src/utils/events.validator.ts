@@ -1,12 +1,27 @@
-import { RMQKeys } from 'scheduler-shared/services/RabbitMQ/consts';
-import { rabbitMQService } from '../../services/external-services';
+import { RMQKeys } from 'scheduler-shared/dist/services/RabbitMQ/consts';
+import { rabbitMQService } from '../services/external-services';
 import { body, param, validationResult } from 'express-validator';
+import { NextFunction, Request, Response, } from 'express';
 
-const isNotEmpty = field => body(field).notEmpty().withMessage(`${field} cannot be empty`);
-const isOptionalArray = field => body(field).isArray().optional();
-const isMongoId = field => param(field).isMongoId().withMessage(`${field} must be a valid Mongo ID`);
+export const validators = {
+    isNotEmpty: (field: any) => body(field).notEmpty().withMessage(`${field} cannot be empty`),
+    isOptionalArray: (field: any) => body(field).isArray().optional(),
+    isMongoId: (field: any) => body(field).notEmpty().withMessage(`${field} must be a valid Mongo ID`),
+    isValidDate: (field: any) => body(field)
+        .custom((value, { req }) => {
+            const date = Date.parse(value);
+            if (isNaN(date)) {
+                throw new Error(`${field} must be a valid date`);
+            }
+            if (new Date(value) <= new Date()) {
+                throw new Error(`${field} must be a future date`);
+            }
+            return true;
+        })
+}
 
-const handleValidationErrors = (req, res, next) => {
+
+const handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         rabbitMQService.publish(RMQKeys.EVENTS.ERROR, { data: errors, message: "Invalid request body" });
@@ -16,9 +31,9 @@ const handleValidationErrors = (req, res, next) => {
 };
 
 export const validateBatchOperations = [
-    isOptionalArray('create'),
-    isOptionalArray('update'),
-    isOptionalArray('deleteIds'),
+    validators.isOptionalArray('create'),
+    validators.isOptionalArray('update'),
+    validators.isOptionalArray('deleteIds'),
     handleValidationErrors,
     (req, res, next) => {
         req.validatedData = {
@@ -31,12 +46,11 @@ export const validateBatchOperations = [
 ];
 
 export const validateScheduleEvent = [
-    isNotEmpty('title'),
-    isNotEmpty('description'),
-    isNotEmpty('location'),
-    isNotEmpty('venue'),
-    isNotEmpty('eventSchedule.date'),
-    isNotEmpty('eventSchedule.time'),
+    validators.isNotEmpty('title'),
+    validators.isNotEmpty('description'),
+    validators.isNotEmpty('location'),
+    validators.isNotEmpty('venue'),
+    validators.isValidDate('eventSchedule'),
     handleValidationErrors,
     (req, res, next) => {
         req.validatedData = req.body;
@@ -45,13 +59,12 @@ export const validateScheduleEvent = [
 ];
 
 export const validateUpdateEvent = [
-    isMongoId('eventId'),
+    validators.isMongoId('_id'),
     body('title').optional(),
     body('description').optional(),
     body('location').optional(),
     body('venue').optional(),
-    body('eventSchedule.date').optional(),
-    body('eventSchedule.time').optional(),
+    validators.isValidDate('eventSchedule').optional(),
     handleValidationErrors,
     (req, res, next) => {
         req.validatedData = {
@@ -63,7 +76,7 @@ export const validateUpdateEvent = [
 ];
 
 export const validateGetEventById = [
-    isMongoId('eventId'),
+    validators.isMongoId('eventId'),
     handleValidationErrors,
     (req, res, next) => {
         req.validatedData = { eventId: req.params.eventId };

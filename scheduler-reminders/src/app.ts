@@ -1,8 +1,8 @@
 import cors from 'cors'
 import express from 'express'
-import { setupDatabase } from 'scheduler-shared/utils/initiators'
-import { HOSTS, URIS, PORTS } from 'scheduler-shared/configs/defaults'
-import { rabbitMQService } from './services/external-services'
+import { setupDatabase } from 'scheduler-shared/dist/utils/initiators'
+import { HOSTS, URIS, PORTS } from 'scheduler-shared/dist/configs/defaults'
+import { bullQService, rabbitMQService } from './services/external-services'
 import { remindersRouter } from './routes/reminders'
 import { remindersService } from './services/reminders.service'
 
@@ -22,8 +22,9 @@ const setupServices = async () => {
 }
 async function startServer() {
   try {
+    bullQService
     setupMiddleware();
-    setupServices();
+    await setupServices();
     setupRoutes();
     appService.listen(PORTS.REMINDERS, () => {
       console.log(`Server is running on port ${PORTS.REMINDERS}`);

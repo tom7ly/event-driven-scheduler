@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { remindersService } from "@/services/remindersService";
-import { IReminder } from "scheduler-shared/models/Reminder.models";
+import { IReminder } from "scheduler-shared/dist/models/Reminder.models";
 import { IconButton } from "@/app/global-components/buttons/IconButton";
 import { CrossSvg } from "@/app/global-components/buttons/svgs/SvgIcons";
 export default function RemindersPage() {
@@ -21,11 +21,10 @@ export default function RemindersPage() {
     if (!reminder.jobId) return;
     const response = await remindersService.cancelReminder(reminder.jobId);
     if (response.status === 200) {
-      setReminders(
-        reminders.filter(
-          (reminder: IReminder) => reminder.jobId !== reminder.jobId
-        )
+      const newReminders = reminders.filter(
+        (r: IReminder) => r.jobId !== reminder.jobId
       );
+      setReminders(newReminders);
     }
   };
 

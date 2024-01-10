@@ -211,6 +211,7 @@ or the user.
         "title": "Annual Company Retreat",
         "description": "A two-day retreat focusing on team building and strategic planning",
         "location": "Mountainview Resort",
+        
         "venue": "Grand Hall",
         "eventSchedule": "2024-06-20T09:00:00.000Z",
         "participants": 150,

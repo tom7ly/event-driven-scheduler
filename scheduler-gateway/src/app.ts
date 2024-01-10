@@ -4,9 +4,9 @@ import cors from 'cors';
 import { eventsRouter } from './routes/events';
 import { remindersRouter } from './routes/reminders';
 import { arena } from './app.config';
-import { PORTS, URIS, HOSTS } from 'scheduler-shared/configs/defaults'
+import { PORTS, URIS, HOSTS } from 'scheduler-shared/dist/configs/defaults'
 import { rabbitMQService } from './services/external-services';
-import { initMongoDB } from 'scheduler-shared/services/MongoDB';
+import { initMongoDB } from 'scheduler-shared/dist/services/MongoDB';
 
 export const app = express();
 
@@ -28,8 +28,8 @@ const setupRoutes = () => {
 async function startServer() {
   try {
     setupMiddleware();
-    setupRoutes();
     await setupServices();
+    setupRoutes();
     app.listen(PORTS.APP, () => { console.log(`Server is running on port ${PORTS.APP}`); });
   }
   catch (err) {

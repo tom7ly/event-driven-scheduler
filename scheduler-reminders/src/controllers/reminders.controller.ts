@@ -1,21 +1,25 @@
 import { bullQService, rabbitMQService, restClient } from '../services/external-services';
 import { Job, JobOptions } from 'bull';
-import { EventModel, IEvent } from 'scheduler-shared/models/Event.models'
-import { IReminder, Reminder } from 'scheduler-shared/models/Reminder.models';
-import { RMQKeys } from 'scheduler-shared/services/RabbitMQ/consts';
+import { EventModel, IEvent } from 'scheduler-shared/dist/models/Event.models'
+import { IReminder, Reminder } from 'scheduler-shared/dist/models/Reminder.models';
+import { RMQKeys } from 'scheduler-shared/dist/services/RabbitMQ/consts';
 
-export const RemindersController = {
-    getReminders: async () => {
+export class RemindersController {
+    constructor() { }
+    handleError(err: Error) {
+        console.error(err);
+        rabbitMQService.publish(RMQKeys.REMINDERS.ERROR, { message: err.message });
+    }
+
+    getReminders = async () => {
         try {
             const jobs = await bullQService.getJobs<IReminder>()
             return jobs.map(({ data, id }) => ({ ...data, jobId: id }));
         } catch (error) {
-            console.error('Failed to get reminders:', error);
-            rabbitMQService.publish(RMQKeys.REMINDERS.ERROR, { message: error.message });
-
+            this.handleError(error);
         }
-    },
-    getEventReminders: async (eventId: string) => {
+    }
+    getEventReminders = async (eventId: string) => {
         try {
             const event: IEvent = await restClient.gw.events.get<IEvent>(eventId).then(res => {
                 if (res.data.jobs.length === 0) throw new Error('No reminders found for this event')
@@ -28,22 +32,19 @@ export const RemindersController = {
             }));
             return reminders;
         } catch (error) {
-            console.error('Failed to get reminder:', error);
-            rabbitMQService.publish(RMQKeys.REMINDERS.ERROR, { message: error.message });
-
+            this.handleError(error);
         }
-    },
-    deleteReminder: async (jobId: string) => {
+    }
+    deleteReminder = async (jobId: number) => {
         try {
-            const reminder = await bullQService.getJob<IReminder>(jobId).then(async (job: Job<IReminder>) => {
+            return await bullQService.getJob<IReminder>(jobId).then(async (job: Job<IReminder>) => {
                 const reminder: IReminder = { ...job.data, jobId: jobId };
                 await job.remove();
                 return reminder
             })
-            await rabbitMQService.publish(RMQKeys.REMINDERS.DELETED, { data: reminder });
         } catch (error) {
-            console.error('Failed to delete reminder:', error);
-            rabbitMQService.publish(RMQKeys.REMINDERS.ERROR, { message: error.message });
+            this.handleError(error);
         }
     }
 }
+export const remindersController = new RemindersController();

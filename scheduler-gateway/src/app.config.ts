@@ -1,6 +1,6 @@
-import { HOSTS, PORTS } from "scheduler-shared/configs/defaults";
+import { HOSTS, PORTS } from "scheduler-shared/dist/configs/defaults";
 
-const Arena = require('bull-arena');
+const Arena = require('bull-arena'); 
 const Bee = require('bee-queue');
 
 export const redis = () => {
