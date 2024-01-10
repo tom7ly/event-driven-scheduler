@@ -76,6 +76,7 @@ export class RMQService {
                 break;
             } catch (error) {
                 if (i === retries - 1) throw error;
+                console.log(`Failed to connect to RabbitMQ ${i + 1} times, retrying in ${interval / 1000} seconds...}`);
                 await new Promise(resolve => setTimeout(resolve, interval))
             }
         }
