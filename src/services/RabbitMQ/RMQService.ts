@@ -68,9 +68,17 @@ export class RMQService {
     private handlers: Map<string, RMQHandler> = new Map();
     constructor(public name: RMQueue | string, public exchange: RMQExchange) {
     }
-    async connect(url: string = URIS.RABBITMQ): Promise<void> {
-        this.connection = await connect(url);
-        this.channel = await this.connection.createChannel();
+    async connect(url: string = URIS.RABBITMQ, retries: number = 5, interval: number = 1000): Promise<void> {
+        for (let i = 0; i < retries; i++) {
+            try {
+                this.connection = await connect(url);
+                this.channel = await this.connection.createChannel();
+                break;
+            } catch (error) {
+                if (i === retries - 1) throw error;
+                await new Promise(resolve => setTimeout(resolve, interval))
+            }
+        }
     }
 
     registerHandler<T>(key: string, handler: RMQHandler<T>): void {
